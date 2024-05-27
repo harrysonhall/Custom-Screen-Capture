@@ -11,7 +11,42 @@
 		2A9E46E62C042F7900EC4971 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E46E52C042F7900EC4971 /* ContentView.swift */; };
 		2A9E46E82C042F7A00EC4971 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A9E46E72C042F7A00EC4971 /* Assets.xcassets */; };
 		2A9E46EB2C042F7A00EC4971 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A9E46EA2C042F7A00EC4971 /* Preview Assets.xcassets */; };
+		2A9E46F32C04304600EC4971 /* SystemExtensionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E46F22C04304600EC4971 /* SystemExtensionsManager.swift */; };
+		2A9E46FB2C04309600EC4971 /* ExtensionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E46FA2C04309600EC4971 /* ExtensionProvider.swift */; };
+		2A9E46FD2C04309600EC4971 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E46FC2C04309600EC4971 /* main.swift */; };
+		2A9E47022C04309600EC4971 /* harrisonhall.cameraSwift.Extension.systemextension in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = 2A9E46F82C04309600EC4971 /* harrisonhall.cameraSwift.Extension.systemextension */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2A9E47082C0430A000EC4971 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E47072C0430A000EC4971 /* Config.swift */; };
+		2A9E47092C0430A000EC4971 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E47072C0430A000EC4971 /* Config.swift */; };
+		2A9E470B2C0437F100EC4971 /* ScreenRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E470A2C0437F100EC4971 /* ScreenRecorder.swift */; };
+		2A9E470E2C04382B00EC4971 /* CaptureEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E470D2C04382B00EC4971 /* CaptureEngine.swift */; };
+		2A9E47102C04385600EC4971 /* CapturePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E470F2C04385600EC4971 /* CapturePreview.swift */; };
+		2A9E47122C04388800EC4971 /* MaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E47112C04388800EC4971 /* MaterialView.swift */; };
+		2A9E47142C04391B00EC4971 /* ConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E47132C04391B00EC4971 /* ConfigurationView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2A9E47002C04309600EC4971 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A9E46D82C042F7900EC4971 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2A9E46F72C04309600EC4971;
+			remoteInfo = Extension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2A9E47062C04309600EC4971 /* Embed System Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(SYSTEM_EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+				2A9E47022C04309600EC4971 /* harrisonhall.cameraSwift.Extension.systemextension in Embed System Extensions */,
+			);
+			name = "Embed System Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2A9E46E02C042F7900EC4971 /* cameraSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cameraSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -20,10 +55,29 @@
 		2A9E46E72C042F7A00EC4971 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2A9E46EA2C042F7A00EC4971 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2A9E46EC2C042F7A00EC4971 /* cameraSwift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = cameraSwift.entitlements; sourceTree = "<group>"; };
+		2A9E46F22C04304600EC4971 /* SystemExtensionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemExtensionsManager.swift; sourceTree = "<group>"; };
+		2A9E46F82C04309600EC4971 /* harrisonhall.cameraSwift.Extension.systemextension */ = {isa = PBXFileReference; explicitFileType = "wrapper.system-extension"; includeInIndex = 0; path = harrisonhall.cameraSwift.Extension.systemextension; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A9E46FA2C04309600EC4971 /* ExtensionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionProvider.swift; sourceTree = "<group>"; };
+		2A9E46FC2C04309600EC4971 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		2A9E46FE2C04309600EC4971 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2A9E46FF2C04309600EC4971 /* Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Extension.entitlements; sourceTree = "<group>"; };
+		2A9E47072C0430A000EC4971 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		2A9E470A2C0437F100EC4971 /* ScreenRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenRecorder.swift; sourceTree = "<group>"; };
+		2A9E470D2C04382B00EC4971 /* CaptureEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureEngine.swift; sourceTree = "<group>"; };
+		2A9E470F2C04385600EC4971 /* CapturePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreview.swift; sourceTree = "<group>"; };
+		2A9E47112C04388800EC4971 /* MaterialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialView.swift; sourceTree = "<group>"; };
+		2A9E47132C04391B00EC4971 /* ConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		2A9E46DD2C042F7900EC4971 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A9E46F52C04309600EC4971 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -37,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				2A9E46E22C042F7900EC4971 /* cameraSwift */,
+				2A9E46F92C04309600EC4971 /* Extension */,
 				2A9E46E12C042F7900EC4971 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -45,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				2A9E46E02C042F7900EC4971 /* cameraSwift.app */,
+				2A9E46F82C04309600EC4971 /* harrisonhall.cameraSwift.Extension.systemextension */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -52,11 +108,13 @@
 		2A9E46E22C042F7900EC4971 /* cameraSwift */ = {
 			isa = PBXGroup;
 			children = (
+				2A9E470C2C04380600EC4971 /* ScreenCaptureKit Files */,
 				2A9E46E32C042F7900EC4971 /* cameraSwiftApp.swift */,
 				2A9E46E52C042F7900EC4971 /* ContentView.swift */,
 				2A9E46E72C042F7A00EC4971 /* Assets.xcassets */,
 				2A9E46EC2C042F7A00EC4971 /* cameraSwift.entitlements */,
 				2A9E46E92C042F7A00EC4971 /* Preview Content */,
+				2A9E46F22C04304600EC4971 /* SystemExtensionsManager.swift */,
 			);
 			path = cameraSwift;
 			sourceTree = "<group>";
@@ -69,6 +127,30 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		2A9E46F92C04309600EC4971 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				2A9E46FA2C04309600EC4971 /* ExtensionProvider.swift */,
+				2A9E47072C0430A000EC4971 /* Config.swift */,
+				2A9E46FC2C04309600EC4971 /* main.swift */,
+				2A9E46FE2C04309600EC4971 /* Info.plist */,
+				2A9E46FF2C04309600EC4971 /* Extension.entitlements */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		2A9E470C2C04380600EC4971 /* ScreenCaptureKit Files */ = {
+			isa = PBXGroup;
+			children = (
+				2A9E470A2C0437F100EC4971 /* ScreenRecorder.swift */,
+				2A9E470D2C04382B00EC4971 /* CaptureEngine.swift */,
+				2A9E470F2C04385600EC4971 /* CapturePreview.swift */,
+				2A9E47112C04388800EC4971 /* MaterialView.swift */,
+				2A9E47132C04391B00EC4971 /* ConfigurationView.swift */,
+			);
+			path = "ScreenCaptureKit Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -79,15 +161,34 @@
 				2A9E46DC2C042F7900EC4971 /* Sources */,
 				2A9E46DD2C042F7900EC4971 /* Frameworks */,
 				2A9E46DE2C042F7900EC4971 /* Resources */,
+				2A9E47062C04309600EC4971 /* Embed System Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2A9E47012C04309600EC4971 /* PBXTargetDependency */,
 			);
 			name = cameraSwift;
 			productName = cameraSwift;
 			productReference = 2A9E46E02C042F7900EC4971 /* cameraSwift.app */;
 			productType = "com.apple.product-type.application";
+		};
+		2A9E46F72C04309600EC4971 /* Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A9E47032C04309600EC4971 /* Build configuration list for PBXNativeTarget "Extension" */;
+			buildPhases = (
+				2A9E46F42C04309600EC4971 /* Sources */,
+				2A9E46F52C04309600EC4971 /* Frameworks */,
+				2A9E46F62C04309600EC4971 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Extension;
+			productName = Extension;
+			productReference = 2A9E46F82C04309600EC4971 /* harrisonhall.cameraSwift.Extension.systemextension */;
+			productType = "com.apple.product-type.system-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -100,6 +201,9 @@
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					2A9E46DF2C042F7900EC4971 = {
+						CreatedOnToolsVersion = 15.2;
+					};
+					2A9E46F72C04309600EC4971 = {
 						CreatedOnToolsVersion = 15.2;
 					};
 				};
@@ -118,6 +222,7 @@
 			projectRoot = "";
 			targets = (
 				2A9E46DF2C042F7900EC4971 /* cameraSwift */,
+				2A9E46F72C04309600EC4971 /* Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -132,6 +237,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2A9E46F62C04309600EC4971 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -140,11 +252,36 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A9E46E62C042F7900EC4971 /* ContentView.swift in Sources */,
+				2A9E47142C04391B00EC4971 /* ConfigurationView.swift in Sources */,
+				2A9E47082C0430A000EC4971 /* Config.swift in Sources */,
+				2A9E47102C04385600EC4971 /* CapturePreview.swift in Sources */,
 				2A9E46E42C042F7900EC4971 /* cameraSwiftApp.swift in Sources */,
+				2A9E46F32C04304600EC4971 /* SystemExtensionsManager.swift in Sources */,
+				2A9E470E2C04382B00EC4971 /* CaptureEngine.swift in Sources */,
+				2A9E470B2C0437F100EC4971 /* ScreenRecorder.swift in Sources */,
+				2A9E47122C04388800EC4971 /* MaterialView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2A9E46F42C04309600EC4971 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A9E46FD2C04309600EC4971 /* main.swift in Sources */,
+				2A9E46FB2C04309600EC4971 /* ExtensionProvider.swift in Sources */,
+				2A9E47092C0430A000EC4971 /* Config.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2A9E47012C04309600EC4971 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2A9E46F72C04309600EC4971 /* Extension */;
+			targetProxy = 2A9E47002C04309600EC4971 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		2A9E46ED2C042F7A00EC4971 /* Debug */ = {
@@ -268,6 +405,7 @@
 		2A9E46F02C042F7A00EC4971 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = cameraSwift/cameraSwift.entitlements;
@@ -295,6 +433,7 @@
 		2A9E46F12C042F7A00EC4971 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = cameraSwift/cameraSwift.entitlements;
@@ -319,6 +458,58 @@
 			};
 			name = Release;
 		};
+		2A9E47042C04309600EC4971 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Extension/Extension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 67C4BBFCAC;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Extension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Extension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = harrisonhall.cameraSwift.Extension;
+				PRODUCT_NAME = "$(inherited)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		2A9E47052C04309600EC4971 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Extension/Extension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 67C4BBFCAC;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Extension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Extension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = harrisonhall.cameraSwift.Extension;
+				PRODUCT_NAME = "$(inherited)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -336,6 +527,15 @@
 			buildConfigurations = (
 				2A9E46F02C042F7A00EC4971 /* Debug */,
 				2A9E46F12C042F7A00EC4971 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2A9E47032C04309600EC4971 /* Build configuration list for PBXNativeTarget "Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A9E47042C04309600EC4971 /* Debug */,
+				2A9E47052C04309600EC4971 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
