@@ -214,26 +214,34 @@ class CameraViewModel: ObservableObject  {
     }
     
     func initSink(deviceId: CMIODeviceID, sinkStream: CMIOStreamID) {
-        let dims = CMVideoDimensions(width: fixedCamWidth, height: fixedCamHeight)
+
+        /// `Creating a Buffer Pool`
+        // TODO: Potentailly delete this
+        /// This video format only seems ot be being used for the buffer pool that the static image is drawn into. It may be able to be deleted.
+        /// This seems to be only for the CVPixelBufferPoolCreate(). Which is the buffer pool used for the static image.
         CMVideoFormatDescriptionCreate(
             allocator: kCFAllocatorDefault,
-            codecType: kCVPixelFormatType_32BGRA,
-            width: dims.width, height: dims.height, extensions: nil, formatDescriptionOut: &_videoDescription)
+            codecType: pixelFormat,
+            width: fixedCamWidth, height: fixedCamHeight, extensions: nil, formatDescriptionOut: &_videoDescription)
         
-        var pixelBufferAttributes: NSDictionary!
-           pixelBufferAttributes = [
-                kCVPixelBufferWidthKey: dims.width,
-                kCVPixelBufferHeightKey: dims.height,
+        // TODO: and this?
+        /// This seems to be for the CVPixelBufferPoolCreate() as well.
+        let pixelBufferAttributes: NSDictionary = [
+                kCVPixelBufferWidthKey: fixedCamWidth,
+                kCVPixelBufferHeightKey: fixedCamHeight,
                 kCVPixelBufferPixelFormatTypeKey: _videoDescription.mediaSubType,
                 kCVPixelBufferIOSurfacePropertiesKey: [:]
-            ]
+        ]
         
+        // TODO: and this too?
+        /// The point of this seems to be to create a buffer pool for the static image in the enqueue function. This doesnt actaully
+        /// have anything to do with the actual sink stream I think.
         CVPixelBufferPoolCreate(kCFAllocatorDefault, nil, pixelBufferAttributes, &_bufferPool)
 
         
         
         
-        
+        /// `Connecting to the Sink Stream`
 //      /// The syntax for the Unmanaged<> type is: Unmanaged<Type>, thats why you see the CMSimpleQ
         let pointerQueue = UnsafeMutablePointer<Unmanaged<CMSimpleQueue>?>.allocate(capacity: 1)
         // see https://stackoverflow.com/questions/53065186/crash-when-accessing-refconunsafemutablerawpointer-inside-cgeventtap-callback
@@ -506,15 +514,57 @@ class CameraViewModel: ObservableObject  {
 //                        self.enqueue(queue, sampleBuffer)
                     
                     // Convereted
-                    if let convertedSampleBuffer = convertSampleBuffer(sampleBuffer) {
+//                    if let convertedSampleBuffer = convertSampleBuffer(sampleBuffer) {
+//                        
+//                        print("Converted Sample buffer is: ", convertedSampleBuffer)
+//                        print("Converted Sample buffer Format Description is: ", convertedSampleBuffer.formatDescription)
+//                        self.enqueue(queue, convertedSampleBuffer)
+//                        
+//                    }
+                    
+                    // Striped
+                    if let stripedSampleBuffer = stripMetadata(from: sampleBuffer) {
                         
-                        print("Converted Sample buffer is: ", convertedSampleBuffer)
-                        self.enqueue(queue, convertedSampleBuffer)
+                        print("Striped Sample buffer is: ", stripedSampleBuffer)
+                        print("Striped Sample buffer Format Description is: ", stripedSampleBuffer.formatDescription)
+                        self.enqueue(queue, stripedSampleBuffer)
                         
                     }
                 }
             }
         }
+    }
+    
+    
+    
+    func stripMetadata(from sampleBuffer: CMSampleBuffer) -> CMSampleBuffer? {
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
+              let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) else {
+            print("Failed to get necessary components from sample buffer")
+            return nil
+        }
+        
+        var timingInfo = CMSampleTimingInfo()
+        CMSampleBufferGetSampleTimingInfo(sampleBuffer, at: 0, timingInfoOut: &timingInfo)
+        
+        var newSampleBuffer: CMSampleBuffer?
+        let status = CMSampleBufferCreateForImageBuffer(
+            allocator: kCFAllocatorDefault,
+            imageBuffer: imageBuffer,
+            dataReady: true,
+            makeDataReadyCallback: nil,
+            refcon: nil,
+            formatDescription: formatDescription,
+            sampleTiming: &timingInfo,
+            sampleBufferOut: &newSampleBuffer
+        )
+        
+        if status != noErr {
+            print("Failed to create new sample buffer: \(status)")
+            return nil
+        }
+        
+        return newSampleBuffer
     }
     
     
@@ -539,7 +589,7 @@ class CameraViewModel: ObservableObject  {
             kCVPixelBufferCGBitmapContextCompatibilityKey as String: true,
             kCVPixelBufferIOSurfacePropertiesKey as String: [:]
         ]
-        let pixelBufferStatus = CVPixelBufferCreate(kCFAllocatorDefault, 1280, 720, kCVPixelFormatType_32BGRA, attributes as CFDictionary, &targetPixelBuffer)
+        let pixelBufferStatus = CVPixelBufferCreate(kCFAllocatorDefault, 3456, 2234, kCVPixelFormatType_32BGRA, attributes as CFDictionary, &targetPixelBuffer)
         guard pixelBufferStatus == kCVReturnSuccess, let outputPixelBuffer = targetPixelBuffer else {
             print("Error creating target pixel buffer: \(pixelBufferStatus)")
             return nil
@@ -553,8 +603,8 @@ class CameraViewModel: ObservableObject  {
         let formatDescriptionStatus = CMVideoFormatDescriptionCreate(
             allocator: kCFAllocatorDefault,
             codecType: kCVPixelFormatType_32BGRA,
-            width: 1280,
-            height: 720,
+            width: 3456,
+            height: 2234,
             extensions: nil,
             formatDescriptionOut: &newFormatDescription
         )

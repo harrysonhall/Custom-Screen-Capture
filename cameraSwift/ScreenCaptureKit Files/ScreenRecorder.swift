@@ -118,6 +118,8 @@ class ScreenRecorder: NSObject, ObservableObject {
         // the memory footprint of WindowServer.
         streamConfig.queueDepth = 5
         
+        streamConfig.pixelFormat = kCVPixelFormatType_32BGRA
+        
         return streamConfig
     }
     

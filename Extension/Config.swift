@@ -6,8 +6,15 @@
 //
 
 import Foundation
+import AVFoundation
 
 let kFrameRate: Int = 30
 let cameraName = "Swift Sample Camera"
-let fixedCamWidth: Int32 = 1280
-let fixedCamHeight: Int32 = 720
+let fixedCamWidth: Int32 = 3456
+let fixedCamHeight: Int32 = 2234
+let pixelFormat: OSType = kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
+
+// Color space and other properties
+let colorPrimaries = kCVImageBufferColorPrimaries_ITU_R_709_2
+let transferFunction = kCVImageBufferTransferFunction_ITU_R_709_2
+let yCbCrMatrix = kCVImageBufferYCbCrMatrix_ITU_R_709_2
