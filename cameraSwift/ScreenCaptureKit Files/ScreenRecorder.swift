@@ -15,15 +15,31 @@ import SwiftUI
 @MainActor
 class ScreenRecorder: NSObject, ObservableObject {
     
+    private let excludedApplicationsKey = "excludedApplications"
+    
     /// The supported capture types.
     enum CaptureType {
         case display
         case window
     }
+    
+    override init() {
+        super.init()
+        
+        // Load the initial value from User Defaults
+        if let savedApplications = UserDefaults.standard.stringArray(forKey: excludedApplicationsKey) {
+            excludedApplications = Set(savedApplications)
+        }
+        
+        // Your other initialization code
+        print("exluded applications are: ", excludedApplications)
+    }
+    
+    
     // Combine subscribers.
     private var subscriptions = Set<AnyCancellable>()
     private let captureEngine = CaptureEngine()
-    private var availableApps = [SCRunningApplication]()
+    @Published private(set) var availableApps = [SCRunningApplication]()
     @Published private(set) var availableDisplays = [SCDisplay]()
     @Published private(set) var availableWindows = [SCWindow]()
     private let logger = Logger()
@@ -38,6 +54,17 @@ class ScreenRecorder: NSObject, ObservableObject {
     @Published var selectedWindow: SCWindow? {
         didSet { updateEngine() }
     }
+    @Published var excludedApplications: Set<String> = [] {
+        didSet {
+            updateEngine()
+            updatePreferencesForExcludedApplications()
+        }
+    }
+    @Published var excludedWindows: Set<String> = [] {
+        didSet {
+            updateEngine()
+        }
+    }
     @Published var isAppExcluded = true {
         didSet { updateEngine() }
     }
@@ -48,6 +75,7 @@ class ScreenRecorder: NSObject, ObservableObject {
     lazy var capturePreview: CapturePreview = {
         CapturePreview()
     }()
+    
 
 
     
@@ -69,31 +97,44 @@ class ScreenRecorder: NSObject, ObservableObject {
     
     ///  `Update Filter`
     private var contentFilter: SCContentFilter {
+        
         var filter: SCContentFilter
-        switch captureType {
-            case .display:
-                guard let display = selectedDisplay else { fatalError("No display selected.") }
-                var excludedApps = [SCRunningApplication]()
-                // If a user chooses to exclude the app from the stream,
-                // exclude it by matching its bundle identifier.
-                if isAppExcluded {
-                    excludedApps = availableApps.filter { app in
-                        Bundle.main.bundleIdentifier == app.bundleIdentifier
-                    }
-                }
-                // Create a content filter with excluded apps.
-                filter = SCContentFilter(display: display,
-                                         excludingApplications: excludedApps,
-                                         exceptingWindows: [])
-            case .window:
-                guard let window = selectedWindow else { fatalError("No window selected.") }
-                
-                // Create a content filter that includes a single window.
-                filter = SCContentFilter(desktopIndependentWindow: window)
+        
+        guard let display = selectedDisplay else { fatalError("No display selected.") }
+        
+        var excludedApps = [SCRunningApplication]()
+        // If a user chooses to exclude the app from the stream,
+        // exclude it by matching its bundle identifier.
+        if !excludedApplications.isEmpty {
+            excludedApps = availableApps.filter { app in
+                excludedApplications.contains(app.bundleIdentifier)
+            }
         }
+        
+        var excludedWins = [SCWindow]()
+        // If a user chooses to exclude windows from the stream,
+        // exclude them by matching its owning applications bundle identifier and title.
+        if !excludedWindows.isEmpty {
+            excludedWins = availableWindows.filter { window in
+                if let title = window.title, !title.isEmpty {
+                    return excludedWindows.contains("\(window.owningApplication?.bundleIdentifier ?? "").\(title)")
+                }
+                return false
+            }
+        }
+        print("Excluded Apps Updated: \(excludedApps)")
+        
+        // Create a content filter with excluded apps.
+        filter = SCContentFilter(display: display, excludingApplications: excludedApps, exceptingWindows: excludedWins)
+     
+        
+        
 
         return filter
     }
+    
+    
+    
     
     private var streamConfiguration: SCStreamConfiguration {
         
@@ -101,24 +142,19 @@ class ScreenRecorder: NSObject, ObservableObject {
         
         // Configure the display content width and height.
         if captureType == .display, let display = selectedDisplay {
-            streamConfig.width = display.width * scaleFactor
-            streamConfig.height = display.height * scaleFactor
-        }
-        
-        // Configure the window content width and height.
-        if captureType == .window, let window = selectedWindow {
-            streamConfig.width = Int(window.frame.width) * 2
-            streamConfig.height = Int(window.frame.height) * 2
+            streamConfig.width = 1728
+            streamConfig.height = 1118
         }
         
         // Set the capture interval at 60 fps.
-        streamConfig.minimumFrameInterval = CMTime(value: 1, timescale: 60)
+        streamConfig.minimumFrameInterval = CMTime(value: 1, timescale: 30)
         
         // Increase the depth of the frame queue to ensure high fps at the expense of increasing
         // the memory footprint of WindowServer.
         streamConfig.queueDepth = 5
         
         streamConfig.pixelFormat = kCVPixelFormatType_32BGRA
+        
         
         return streamConfig
     }
@@ -134,6 +170,7 @@ class ScreenRecorder: NSObject, ObservableObject {
             guard let self = self else { return }
             Task {
                 await self.refreshAvailableContent()
+                print("mointoring available content")
             }
         }
         .store(in: &subscriptions)
@@ -143,15 +180,23 @@ class ScreenRecorder: NSObject, ObservableObject {
     private func refreshAvailableContent() async {
         do {
             // Retrieve the available screen content to capture.
-            let availableContent = try await SCShareableContent.excludingDesktopWindows(false,
-                                                                                        onScreenWindowsOnly: true)
+            let availableContent = try await SCShareableContent.excludingDesktopWindows(false,onScreenWindowsOnly: false)
+            
             availableDisplays = availableContent.displays
             
+            // Refresh Applications
+            let applications = filterApplications(availableContent.applications)
+            if applications != availableApps {
+                availableApps = applications
+            }
+            
+            // Refresh Windows
             let windows = filterWindows(availableContent.windows)
             if windows != availableWindows {
                 availableWindows = windows
             }
-            availableApps = availableContent.applications
+            
+            
             
             if selectedDisplay == nil {
                 selectedDisplay = availableDisplays.first
@@ -220,14 +265,27 @@ class ScreenRecorder: NSObject, ObservableObject {
     
     private func filterWindows(_ windows: [SCWindow]) -> [SCWindow] {
         windows
+            // Filter out windows where the title is nil or an empty string
+            .filter { !($0.title?.isEmpty ?? true) }
+            // Sort the windows by title alphabetically
+            .sorted { $0.title! < $1.title! }
         // Sort the windows by app name.
-            .sorted { $0.owningApplication?.applicationName ?? "" < $1.owningApplication?.applicationName ?? "" }
-        
+//            .sorted { $0.owningApplication?.applicationName ?? "" < $1.owningApplication?.applicationName ?? "" }
         // TODO: Remove these two other filters, just leave the sorted
         // Remove windows that don't have an associated .app bundle.
-            .filter { $0.owningApplication != nil && $0.owningApplication?.applicationName != "" }
+//            .filter { $0.owningApplication != nil && $0.owningApplication?.applicationName != "" }
         // Remove this app's window from the list.
-            .filter { $0.owningApplication?.bundleIdentifier != Bundle.main.bundleIdentifier }
+//            .filter { $0.owningApplication?.bundleIdentifier != Bundle.main.bundleIdentifier }
+    }
+    
+    private func filterApplications(_ applications: [SCRunningApplication]) -> [SCRunningApplication] {
+        applications
+            .sorted { $0.applicationName.lowercased() < $1.applicationName.lowercased() }
+    }
+    
+    private func updatePreferencesForExcludedApplications() {
+         UserDefaults.standard.set(Array(excludedApplications), forKey: "excludedApplications")
+            print("Excluded App defaults updated")
     }
 }
 

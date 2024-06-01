@@ -125,7 +125,9 @@ private class CaptureEngineStreamOutput: NSObject, SCStreamOutput, SCStreamDeleg
 //            }
 //
 //            CameraViewModel.shared.fireTimer()
+//            print("sample buffer extensions are: ", sampleBuffer.formatDescription?.extensions)
             CameraViewModel.shared.fireTimer(sampleBuffer)
+//            CameraViewModel.shared.fireTimer()
             
             
             

@@ -60,17 +60,18 @@ class cameraDeviceSource: NSObject, CMIOExtensionDeviceSource {
         let deviceID = UUID()
         self.device = CMIOExtensionDevice(localizedName: localizedName, deviceID: deviceID, legacyDeviceID: deviceID.uuidString, source: self)
         
-        //let dims = CMVideoDimensions(width: 1920, height: 1080)
-        let dimension = CMVideoDimensions(width: fixedCamWidth, height: fixedCamHeight)
         CMVideoFormatDescriptionCreate(
             allocator: kCFAllocatorDefault,
-            codecType: kCVPixelFormatType_32BGRA,
-            //codecType: kCVPixelFormatType_32ARGB/*kCVPixelFormatType_32BGRA*/,
-            width: dimension.width, height: dimension.height, extensions: nil, formatDescriptionOut: &_videoDescription)
+            codecType: pixelFormat,
+            width: fixedCamWidth, 
+            height: fixedCamHeight,
+            extensions: nil,
+            formatDescriptionOut: &_videoDescription
+        )
         
         let pixelBufferAttributes: NSDictionary = [
-            kCVPixelBufferWidthKey: dimension.width,
-            kCVPixelBufferHeightKey: dimension.height,
+            kCVPixelBufferWidthKey: fixedCamWidth,
+            kCVPixelBufferHeightKey: fixedCamHeight,
             kCVPixelBufferPixelFormatTypeKey: _videoDescription.mediaSubType,
             kCVPixelBufferIOSurfacePropertiesKey: [:]
         ]

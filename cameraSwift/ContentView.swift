@@ -53,7 +53,7 @@ struct ContentView: View {
     var body: some View {
         HSplitView {
             ConfigurationView(screenRecorder: screenRecorder, userStopped: $userStopped)
-                .frame(minWidth: 280, maxWidth: 280)
+                .frame(width: 400)
                 .disabled(disableInput)
             screenRecorder.capturePreview
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -499,7 +499,7 @@ class CameraViewModel: ObservableObject  {
     }
     
     @objc func fireTimer(_ sampleBuffer: CMSampleBuffer) {
-        print("firing")
+//        print("firing")
         if needToStream {
             
             if (enqueued == false || readyToEnqueue == true) {
@@ -525,10 +525,9 @@ class CameraViewModel: ObservableObject  {
                     // Striped
                     if let stripedSampleBuffer = stripMetadata(from: sampleBuffer) {
                         
-                        print("Striped Sample buffer is: ", stripedSampleBuffer)
-                        print("Striped Sample buffer Format Description is: ", stripedSampleBuffer.formatDescription)
+//                        print("Striped Sample buffer is: ", stripedSampleBuffer)
+//                        print("Striped Sample buffer Format Description is: ", stripedSampleBuffer.formatDescription)
                         self.enqueue(queue, stripedSampleBuffer)
-                        
                     }
                 }
             }
