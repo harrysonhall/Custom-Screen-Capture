@@ -116,7 +116,16 @@ private class CaptureEngineStreamOutput: NSObject, SCStreamOutput, SCStreamDeleg
             
             
             
-      
+            // Get size of orinal buffer
+//            if let originalBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+//                let orignalSize = CVPixelBufferGetDataSize(originalBuffer)
+//                print("the size of the buffer is: ", orignalSize)
+//            }
+//            
+//            print("CMSampleBuffer image buffer is: ", sampleBuffer.imageBuffer)
+//            print("CMSampleBuffer is: ", sampleBuffer)
+    
+            
             
             // Enqueue the frame if canStream is true
 //            if CameraQueueManager.shared.canStream {
@@ -128,7 +137,6 @@ private class CaptureEngineStreamOutput: NSObject, SCStreamOutput, SCStreamDeleg
 //            print("sample buffer extensions are: ", sampleBuffer.formatDescription?.extensions)
             CameraViewModel.shared.fireTimer(sampleBuffer)
 //            CameraViewModel.shared.fireTimer()
-            
             
             
             

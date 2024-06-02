@@ -53,10 +53,10 @@ struct ContentView: View {
     var body: some View {
         HSplitView {
             ConfigurationView(screenRecorder: screenRecorder, userStopped: $userStopped)
-                .frame(width: 400)
+                .frame(minWidth: 300, maxWidth: 500)
                 .disabled(disableInput)
             screenRecorder.capturePreview
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame( maxWidth: .infinity, maxHeight: .infinity)
                 .aspectRatio(screenRecorder.contentSize, contentMode: .fit)
                 .padding(8)
                 .overlay {
@@ -68,7 +68,18 @@ struct ContentView: View {
                             .background(Color(white: 0.0, opacity: 0.5))
                     }
                 }
+                .border(Color.black)
+                .onAppear {
+                    print("aspect ratio is: ", screenRecorder.contentSize)
+                }
+            
+            CameraView()
+                .frame( maxWidth: .infinity, maxHeight: .infinity)
+                .aspectRatio(AspectRatio.aspectRatio, contentMode: .fit)
+                .padding(8)
+                .border(Color.black)
         }
+        .background(Color.gray)
         .overlay {
             if isUnauthorized {
                 VStack() {
@@ -362,21 +373,7 @@ class CameraViewModel: ObservableObject  {
         propTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(propertyTimer), userInfo: nil, repeats: true)
     }
 
-//    func showMessage(_ text: String) {
-//        print("showMessage",text)
-//        debugCaption.stringValue += "\(text)\n"
-//    }
-    
-//    func fakeLabel(_ text: String) -> NSTextField {
-//        let label = NSTextField()
-//        label.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 24))
-//        label.stringValue = text
-//        label.backgroundColor = .clear
-//        //label.isBezeled = false
-//        label.isEditable = false
-//        //label.sizeToFit()
-//        return label
-//    }
+
     func enqueue(_ queue: CMSimpleQueue, _ image: CGImage) {
         guard CMSimpleQueueGetCount(queue) < CMSimpleQueueGetCapacity(queue) else {
             print("error enqueuing")
@@ -389,29 +386,7 @@ class CameraViewModel: ObservableObject  {
             
             CVPixelBufferLockBaseAddress(pixelBuffer, [])
             
-            /*var bufferPtr = CVPixelBufferGetBaseAddress(pixelBuffer)!
-            let width = CVPixelBufferGetWidth(pixelBuffer)
-            let height = CVPixelBufferGetHeight(pixelBuffer)
-            let rowBytes = CVPixelBufferGetBytesPerRow(pixelBuffer)
-            memset(bufferPtr, 0, rowBytes * height)
-            
-            let whiteStripeStartRow = self._whiteStripeStartRow
-            if self._whiteStripeIsAscending {
-                self._whiteStripeStartRow = whiteStripeStartRow - 1
-                self._whiteStripeIsAscending = self._whiteStripeStartRow > 0
-            }
-            else {
-                self._whiteStripeStartRow = whiteStripeStartRow + 1
-                self._whiteStripeIsAscending = self._whiteStripeStartRow >= (height - kWhiteStripeHeight)
-            }
-            bufferPtr += rowBytes * Int(whiteStripeStartRow)
-            for _ in 0..<kWhiteStripeHeight {
-                for _ in 0..<width {
-                    var white: UInt32 = 0xFFFFFFFF
-                    memcpy(bufferPtr, &white, MemoryLayout.size(ofValue: white))
-                    bufferPtr += MemoryLayout.size(ofValue: white)
-                }
-            }*/
+
             let pixelData = CVPixelBufferGetBaseAddress(pixelBuffer)
             let width = CVPixelBufferGetWidth(pixelBuffer)
             let height = CVPixelBufferGetHeight(pixelBuffer)
@@ -499,7 +474,6 @@ class CameraViewModel: ObservableObject  {
     }
     
     @objc func fireTimer(_ sampleBuffer: CMSampleBuffer) {
-//        print("firing")
         if needToStream {
             
             if (enqueued == false || readyToEnqueue == true) {
@@ -508,6 +482,7 @@ class CameraViewModel: ObservableObject  {
                     
                     enqueued = true
                     readyToEnqueue = false
+                    
                     
                     // Normal
 //                    print("CMSample buffer is: ", sampleBuffer)
@@ -527,6 +502,7 @@ class CameraViewModel: ObservableObject  {
                         
 //                        print("Striped Sample buffer is: ", stripedSampleBuffer)
 //                        print("Striped Sample buffer Format Description is: ", stripedSampleBuffer.formatDescription)
+//                        print("processed sample buffer is: ", str)
                         self.enqueue(queue, stripedSampleBuffer)
                     }
                 }
@@ -537,6 +513,8 @@ class CameraViewModel: ObservableObject  {
     
     
     func stripMetadata(from sampleBuffer: CMSampleBuffer) -> CMSampleBuffer? {
+        
+        
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer),
               let formatDescription = CMSampleBufferGetFormatDescription(sampleBuffer) else {
             print("Failed to get necessary components from sample buffer")
@@ -563,78 +541,12 @@ class CameraViewModel: ObservableObject  {
             return nil
         }
         
+        
         return newSampleBuffer
     }
     
     
     
-    func convertSampleBuffer(_ sampleBuffer: CMSampleBuffer) -> CMSampleBuffer? {
-        // Get the pixel buffer from the sample buffer
-        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-            print("Failed to get pixel buffer from sample buffer")
-            return nil
-        }
-        
-        // Create a Core Image context
-        let ciContext = CIContext()
-        
-        // Create a CIImage from the pixel buffer
-        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-        
-        // Create a new pixel buffer with the desired format and dimensions (1280x720, BGRA)
-        var targetPixelBuffer: CVPixelBuffer?
-        let attributes: [String: Any] = [
-            kCVPixelBufferCGImageCompatibilityKey as String: true,
-            kCVPixelBufferCGBitmapContextCompatibilityKey as String: true,
-            kCVPixelBufferIOSurfacePropertiesKey as String: [:]
-        ]
-        let pixelBufferStatus = CVPixelBufferCreate(kCFAllocatorDefault, 3456, 2234, kCVPixelFormatType_32BGRA, attributes as CFDictionary, &targetPixelBuffer)
-        guard pixelBufferStatus == kCVReturnSuccess, let outputPixelBuffer = targetPixelBuffer else {
-            print("Error creating target pixel buffer: \(pixelBufferStatus)")
-            return nil
-        }
-        
-        // Render the CIImage into the new pixel buffer
-        ciContext.render(ciImage, to: outputPixelBuffer)
-        
-        // Create a new video format description for the target format (BGRA, 1280x720)
-        var newFormatDescription: CMVideoFormatDescription?
-        let formatDescriptionStatus = CMVideoFormatDescriptionCreate(
-            allocator: kCFAllocatorDefault,
-            codecType: kCVPixelFormatType_32BGRA,
-            width: 3456,
-            height: 2234,
-            extensions: nil,
-            formatDescriptionOut: &newFormatDescription
-        )
-        guard formatDescriptionStatus == noErr, let outputFormatDescription = newFormatDescription else {
-            print("Error creating format description: \(formatDescriptionStatus)")
-            return nil
-        }
-        
-        // Create a new sample buffer from the target pixel buffer
-        var newSampleBuffer: CMSampleBuffer?
-        var timingInfo = CMSampleTimingInfo()
-        timingInfo.presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        
-        let sampleBufferStatus = CMSampleBufferCreateForImageBuffer(
-            allocator: kCFAllocatorDefault,
-            imageBuffer: outputPixelBuffer,
-            dataReady: true,
-            makeDataReadyCallback: nil,
-            refcon: nil,
-            formatDescription: outputFormatDescription,
-            sampleTiming: &timingInfo,
-            sampleBufferOut: &newSampleBuffer
-        )
-        
-        guard sampleBufferStatus == noErr, let outputSampleBuffer = newSampleBuffer else {
-            print("Error creating new sample buffer: \(sampleBufferStatus)")
-            return nil
-        }
-        
-        return outputSampleBuffer
-    }
     
 
 }

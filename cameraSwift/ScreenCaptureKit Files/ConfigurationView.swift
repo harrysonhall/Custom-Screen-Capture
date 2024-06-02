@@ -18,43 +18,72 @@ struct ConfigurationView: View {
     private let sectionSpacing: CGFloat = 20
     private let verticalLabelSpacing: CGFloat = 8
     private let alignmentOffset: CGFloat = 10
+    @State private var scrollOffset: CGFloat = 0
     
     @ObservedObject var screenRecorder: ScreenRecorder
     @Binding var userStopped: Bool
     
     var body: some View {
         VStack {
-            Form {
-                HeaderView("Video")
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 1, trailing: 0))
-                
-                // A group that hides view labels.
-                Group {
-                    VStack(alignment: .leading, spacing: verticalLabelSpacing) {
-                        Text("Capture Type")
-                        Picker("Capture", selection: $screenRecorder.captureType) {
-                            Text("Display").tag(ScreenRecorder.CaptureType.display)
-                        }
-                    }
-                    
-                    VStack(alignment: .leading, spacing: verticalLabelSpacing) {
-                        Text("Screen Content")
-                        Picker("Display", selection: $screenRecorder.selectedDisplay) {
-                            ForEach(screenRecorder.availableDisplays, id: \.self) { display in
-                                Text(display.displayName).tag(SCDisplay?.some(display))
-                            }
-                        }
-                    }
-                }
-                .labelsHidden()
-                
-                Toggle("Exclude sample app from stream", isOn: $screenRecorder.isAppExcluded)
-                    .disabled(screenRecorder.captureType == .window)
-
-            }
+//            Form {
+//                HeaderView("Video")
+//                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 1, trailing: 0))
+//                
+//                // A group that hides view labels.
+//                Group {
+//                    VStack(alignment: .leading, spacing: verticalLabelSpacing) {
+//                        Text("Capture Type")
+//                        Picker("Capture", selection: $screenRecorder.captureType) {
+//                            Text("Display").tag(ScreenRecorder.CaptureType.display)
+//                        }
+//                    }
+//                    
+//                    VStack(alignment: .leading, spacing: verticalLabelSpacing) {
+//                        Text("Screen Content")
+//                        Picker("Display", selection: $screenRecorder.selectedDisplay) {
+//                            ForEach(screenRecorder.availableDisplays, id: \.self) { display in
+//                                Text(display.displayName).tag(SCDisplay?.some(display))
+//                            }
+//                        }
+//                    }
+//                }
+//                .labelsHidden()
+//                
+//                Toggle("Exclude sample app from stream", isOn: $screenRecorder.isAppExcluded)
+//                    .disabled(screenRecorder.captureType == .window)
+//
+//            }
             
+            VStack {
+                Text("Applications")
+                    .font(.title2)
+                    .fontDesign(.default)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    .border(Color.black)
+                
+                Spacer()
+                    .frame(height: 10)
+                
+                Text("Here you can choose what applicaitons to hide or show in the screen capture")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(.secondary)
+//                    .border(Color.black)
+                
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
+            .padding(.bottom, 10)
+//            .border(Color.black)
+        
+            
+            Divider()
+                .background(Color.black)
+                .frame(height: 2)
             
             ScrollView {
+              
                 VStack {
                     ForEach(screenRecorder.availableApps, id: \.self) { app in
                         AppToggleView(
@@ -95,11 +124,12 @@ struct ConfigurationView: View {
                         }
                     }
                     .frame(maxWidth: .infinity)
-                    .border(Color.black)
                 }
                 .frame(maxWidth: .infinity)
-                .border(Color.black)
+                .padding(20)
             }
+        
+            
             
 
             
@@ -149,7 +179,7 @@ struct ConfigurationView: View {
             }
             .frame(maxWidth: .infinity, minHeight: 60)
         }
-        .background(MaterialView())
+        .background(WindowBackgroundShapeStyle.windowBackground)
     }
     
 
@@ -167,12 +197,12 @@ struct ConfigurationView: View {
 
 
 
-
 struct AppToggleView<Content: View>: View {
     let appName: String
     let bundleId: String
     let content: () -> Content?
     let onToggle: (Bool) -> Void
+    @State private var isContentVisible = false
     @State var isToggled: Bool = true
     @State private var appIcon: NSImage?
     
@@ -198,6 +228,7 @@ struct AppToggleView<Content: View>: View {
                     Button(action: {
                         // Define what happens when the button is clicked
                         print("Button clicked!")
+                        isContentVisible.toggle()
                     }) {
                         HStack {
                             if let icon = appIcon {
@@ -209,33 +240,37 @@ struct AppToggleView<Content: View>: View {
                                     .scaledToFit()
                                     .frame(width: 32, height: 32)  // Force size to 32x32
                             }
-                            Text("[ \(appName) ]")
+                            Text("\(appName)")
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .contentShape(Rectangle())  // Ensures the whole HStack is tappable
                     }
                     .buttonStyle(PlainButtonStyle()) // Use PlainButtonStyle to remove default button styling
-                    .border(Color.black)  // Adds a border to the button
                     
                     Spacer()
                     
                     Toggle("", isOn: $isToggled)
                         .toggleStyle(SwitchToggleStyle())
-                        .border(Color.black)  // Adds a border around the Toggle
                         .onChange(of: isToggled) { newValue in
                             onToggle(newValue) // Call the onToggle closure with the new value
                         }
                 }
-                .border(Color.black)
+                .padding(2)
                 
-                if let content = content() {
-                    content
-                        .padding(.leading, 32)
+                
+                if isContentVisible {
+                    if let content = content() {
+                        content
+                            .padding(.leading, 32)
+                            .animation(.easeInOut)
+                    }
                 }
             }
         }
         .frame(maxWidth: .infinity)
-        .border(Color.black)
+        
+        .transition(.move(edge: .top))
+        .animation(.easeInOut)
     }
     
     static func getAppIcon(bundleId: String) -> NSImage? {

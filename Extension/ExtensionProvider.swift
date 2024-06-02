@@ -66,6 +66,7 @@ class cameraDeviceSource: NSObject, CMIOExtensionDeviceSource {
             width: fixedCamWidth, 
             height: fixedCamHeight,
             extensions: nil,
+            
             formatDescriptionOut: &_videoDescription
         )
         
@@ -189,6 +190,7 @@ class cameraDeviceSource: NSObject, CMIOExtensionDeviceSource {
                 } else {
                     self.lastMessage = "err send"
                 }
+                os_log(.debug, "CMSampleBuffer is: ")
             }
         }
         

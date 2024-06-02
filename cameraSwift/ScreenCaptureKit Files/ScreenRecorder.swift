@@ -141,10 +141,8 @@ class ScreenRecorder: NSObject, ObservableObject {
         let streamConfig = SCStreamConfiguration()
         
         // Configure the display content width and height.
-        if captureType == .display, let display = selectedDisplay {
-            streamConfig.width = 1728
-            streamConfig.height = 1118
-        }
+        streamConfig.width = 1728
+        streamConfig.height = 1118
         
         // Set the capture interval at 60 fps.
         streamConfig.minimumFrameInterval = CMTime(value: 1, timescale: 30)
@@ -153,7 +151,7 @@ class ScreenRecorder: NSObject, ObservableObject {
         // the memory footprint of WindowServer.
         streamConfig.queueDepth = 5
         
-        streamConfig.pixelFormat = kCVPixelFormatType_32BGRA
+//        streamConfig.pixelFormat = kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
         
         
         return streamConfig

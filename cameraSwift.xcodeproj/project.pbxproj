@@ -22,6 +22,8 @@
 		2A9E47102C04385600EC4971 /* CapturePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E470F2C04385600EC4971 /* CapturePreview.swift */; };
 		2A9E47122C04388800EC4971 /* MaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E47112C04388800EC4971 /* MaterialView.swift */; };
 		2A9E47142C04391B00EC4971 /* ConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E47132C04391B00EC4971 /* ConfigurationView.swift */; };
+		2AB4DA292C0BED27003103B8 /* VirtualCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB4DA282C0BED27003103B8 /* VirtualCameraView.swift */; };
+		2AB4DA2D2C0BEE9B003103B8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2AB4DA2C2C0BEE9B003103B8 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,8 @@
 		2A9E470F2C04385600EC4971 /* CapturePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePreview.swift; sourceTree = "<group>"; };
 		2A9E47112C04388800EC4971 /* MaterialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialView.swift; sourceTree = "<group>"; };
 		2A9E47132C04391B00EC4971 /* ConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationView.swift; sourceTree = "<group>"; };
+		2AB4DA282C0BED27003103B8 /* VirtualCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualCameraView.swift; sourceTree = "<group>"; };
+		2AB4DA2C2C0BEE9B003103B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,7 @@
 		2A9E46E22C042F7900EC4971 /* cameraSwift */ = {
 			isa = PBXGroup;
 			children = (
+				2AB4DA2C2C0BEE9B003103B8 /* Info.plist */,
 				2A9E470C2C04380600EC4971 /* ScreenCaptureKit Files */,
 				2A9E46E32C042F7900EC4971 /* cameraSwiftApp.swift */,
 				2A9E46E52C042F7900EC4971 /* ContentView.swift */,
@@ -147,6 +152,7 @@
 				2A9E470F2C04385600EC4971 /* CapturePreview.swift */,
 				2A9E47112C04388800EC4971 /* MaterialView.swift */,
 				2A9E47132C04391B00EC4971 /* ConfigurationView.swift */,
+				2AB4DA282C0BED27003103B8 /* VirtualCameraView.swift */,
 			);
 			path = "ScreenCaptureKit Files";
 			sourceTree = "<group>";
@@ -234,6 +240,7 @@
 			files = (
 				2A9E46EB2C042F7A00EC4971 /* Preview Assets.xcassets in Resources */,
 				2A9E46E82C042F7A00EC4971 /* Assets.xcassets in Resources */,
+				2AB4DA2D2C0BEE9B003103B8 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,6 +259,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A9E46E62C042F7900EC4971 /* ContentView.swift in Sources */,
+				2AB4DA292C0BED27003103B8 /* VirtualCameraView.swift in Sources */,
 				2A9E47142C04391B00EC4971 /* ConfigurationView.swift in Sources */,
 				2A9E47082C0430A000EC4971 /* Config.swift in Sources */,
 				2A9E47102C04385600EC4971 /* CapturePreview.swift in Sources */,
@@ -417,6 +425,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = cameraSwift/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -445,6 +454,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = cameraSwift/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
