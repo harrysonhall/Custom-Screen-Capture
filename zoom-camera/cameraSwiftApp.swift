@@ -16,6 +16,14 @@ struct cameraSwiftApp: App {
             ContentView()
                 .frame(minWidth: 960, minHeight: 724)
                 .background(.black)
+                .onAppear {
+                    if let bundleIdentifier = Bundle.main.bundleIdentifier {
+                            let defaultsPath = NSHomeDirectory() + "/Library/Preferences/" + bundleIdentifier + ".plist"
+                            print("User defaults file path: \(defaultsPath)")
+                        } else {
+                            print("Could not determine bundle identifier.")
+                        }
+                }
         }
     }
 }

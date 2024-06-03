@@ -7,7 +7,7 @@ class SystemExtensionManager: NSObject, OSSystemExtensionRequestDelegate {
     
     private override init() {}
     
-    private let extensionIdentifier = "harrisonhall.cameraSwift.Extension" // Explicitly set the bundle identifier of the system extension
+    private let extensionIdentifier = "zoom-camera.Extension" // Explicitly set the bundle identifier of the system extension
      
      func installExtension() {
          print("Attempting to install")
@@ -29,7 +29,7 @@ class SystemExtensionManager: NSObject, OSSystemExtensionRequestDelegate {
     
     private static func extensionBundle() -> Bundle? {
         // Replace with the actual bundle identifier of your system extension
-        return Bundle(identifier: "harrisonhall.examplecam-test")
+        return Bundle(identifier: "zoom-camera.Extension")
     }
     
     // MARK: - OSSystemExtensionRequestDelegate
