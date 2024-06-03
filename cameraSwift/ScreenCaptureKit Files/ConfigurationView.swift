@@ -142,8 +142,20 @@ struct ConfigurationView: View {
                 label: { Text("Uninstall Extension") }
             }
             .frame(maxWidth: .infinity, minHeight: 60)
+            .border(Color.black)
     
             
+            
+            HStack {
+                Button { Utility.renderVirtualCameraPreview = true }
+                label: { Text("Enable Virtual Camera Preview") }
+                
+                
+                Button { Utility.renderVirtualCameraPreview = false }
+                label: { Text("Disable Virtual Camera Preview") }
+            }
+            .frame(maxWidth: .infinity, minHeight: 60)
+            .border(Color.black)
             
             
             

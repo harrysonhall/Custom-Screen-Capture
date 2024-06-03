@@ -15,6 +15,7 @@ class CameraViewController: NSViewController {
     
     var captureSession: AVCaptureSession?
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
+    var virtualCamera: AVCaptureDevice?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,9 +32,14 @@ class CameraViewController: NSViewController {
             mediaType: .video,
             position: .unspecified
         )
+        
+        for device in discoverySession.devices {
+            print("deivces localized name is: ", device.localizedName == cameraName)
+            virtualCamera = device
+        }
     
-        guard let backCamera = discoverySession.devices.first,
-              let input = try? AVCaptureDeviceInput(device: backCamera),
+        guard let selectedVirtualCamera = virtualCamera,
+              let input = try? AVCaptureDeviceInput(device: selectedVirtualCamera),
               captureSession?.canAddInput(input) == true else {
             return
         }
@@ -45,7 +51,7 @@ class CameraViewController: NSViewController {
 
         
         let dimensions = CMVideoFormatDescriptionGetDimensions(input.device.activeFormat.formatDescription)
-        AspectRatio.aspectRatio = CGSize(width: Int(dimensions.width), height: Int(dimensions.height))
+        Utility.aspectRatio = CGSize(width: Int(dimensions.width), height: Int(dimensions.height))
         
         if view.layer == nil {
             view.layer = CALayer()
@@ -82,6 +88,21 @@ struct CameraView: NSViewControllerRepresentable {
 }
 
 
-class AspectRatio {
+class Utility {
     static var aspectRatio = CGSize(width: 1, height: 1)
+    static var renderVirtualCameraPreview = false
+    static var virtualCamera: AVCaptureDevice?
+    static var listOfDevices: [String] {
+        var deviceNames: [String] = []
+        let discoverySession = AVCaptureDevice.DiscoverySession(
+            deviceTypes: [.external],
+            mediaType: .video,
+            position: .unspecified
+        )
+        for device in discoverySession.devices {
+            deviceNames.append(device.localizedName)
+        }
+        return deviceNames
+    }
+    
 }

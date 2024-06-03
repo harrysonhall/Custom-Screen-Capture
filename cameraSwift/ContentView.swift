@@ -73,11 +73,13 @@ struct ContentView: View {
                     print("aspect ratio is: ", screenRecorder.contentSize)
                 }
             
-            CameraView()
-                .frame( maxWidth: .infinity, maxHeight: .infinity)
-                .aspectRatio(AspectRatio.aspectRatio, contentMode: .fit)
-                .padding(8)
-                .border(Color.black)
+            if Utility.renderVirtualCameraPreview {
+                CameraView()
+                    .frame( maxWidth: .infinity, maxHeight: .infinity)
+                    .aspectRatio(Utility.aspectRatio, contentMode: .fit)
+                    .padding(8)
+                    .border(Color.black)
+            }
         }
         .background(Color.gray)
         .overlay {
